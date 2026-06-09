@@ -60,6 +60,13 @@ export default function AdminPage() {
     return acc;
   }, [] as Array<{ stage: string; label: string; companies: Company[] }>);
 
+  async function safeJson(res: Response): Promise<Record<string, unknown>> {
+    const text = await res.text();
+    try { return JSON.parse(text); } catch {
+      throw new Error(res.ok ? text.slice(0, 200) : `Server error (${res.status}): ${text.slice(0, 200)}`);
+    }
+  }
+
   const handleGenerate = async () => {
     if (!selectedCompany || !docType) return;
     setStatus('generating_doc');
@@ -70,29 +77,29 @@ export default function AdminPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type: docType, guidance: guidance || undefined }),
       });
-      const data = await res.json();
+      const data = await safeJson(res);
       if (data.status === 'error') {
         setStatus('error');
         setStatusMessage(`Error: ${data.error}`);
         return;
       }
       setStatus('regenerating_brief');
-      setStatusMessage(`Document "${data.document?.title}" created. Regenerating brief...`);
+      setStatusMessage(`Document "${(data.document as Record<string, string>)?.title}" created. Regenerating brief...`);
       fetch('/api/generation-log').then(r => r.json()).then(setLog);
 
       const briefRes = await fetch(`/api/briefs/${selectedCompany}/generate`, { method: 'POST' });
-      const briefData = await briefRes.json();
+      const briefData = await safeJson(briefRes);
       if (briefData.status === 'error') {
         setStatus('error');
         setStatusMessage(`Document created but brief failed: ${briefData.error}`);
         return;
       }
       setStatus('done');
-      setStatusMessage(`Done! Document "${data.document?.title}" created and brief regenerated.`);
+      setStatusMessage(`Done! Document "${(data.document as Record<string, string>)?.title}" created and brief regenerated.`);
       fetch('/api/generation-log').then(r => r.json()).then(setLog);
     } catch (e) {
       setStatus('error');
-      setStatusMessage(`Error: ${e}`);
+      setStatusMessage(`Error: ${e instanceof Error ? e.message : String(e)}`);
     }
   };
 
