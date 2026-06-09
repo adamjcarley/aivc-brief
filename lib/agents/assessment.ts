@@ -70,6 +70,23 @@ export interface AssessmentResult {
   actions: string[];
 }
 
+function buildUserMessage(
+  company: Record<string, unknown>,
+  team: Record<string, unknown>[],
+  pitchbook: Record<string, unknown>[],
+  documents: Record<string, unknown>[],
+  metrics?: Record<string, unknown>[]
+): string {
+  const docsText = documents
+    .sort((a, b) => new Date(a.date as string).getTime() - new Date(b.date as string).getTime())
+    .map(d => `### [${d.type}] ${d.title}\nDate: ${d.date} | Source: ${d.source} | Author: ${d.author || 'N/A'}\n${d.content}`)
+    .join('\n\n---\n\n');
+
+  let msg = `## Company Record\n${JSON.stringify(company, null, 2)}\n\n## AIVC Team\n${JSON.stringify(team, null, 2)}\n\n## Pitchbook Funding History\n${JSON.stringify(pitchbook, null, 2)}\n\n## Source Documents\n${docsText}`;
+  if (metrics) msg += `\n\n## Key Metrics History\n${JSON.stringify(metrics, null, 2)}`;
+  return msg;
+}
+
 export async function runAssessmentAgent(
   company: Record<string, unknown>,
   team: Record<string, unknown>[],
@@ -77,13 +94,7 @@ export async function runAssessmentAgent(
   documents: Record<string, unknown>[]
 ): Promise<AssessmentResult> {
   const client = new Anthropic();
-
-  const docsText = documents
-    .sort((a, b) => new Date(a.date as string).getTime() - new Date(b.date as string).getTime())
-    .map(d => `### [${d.type}] ${d.title}\nDate: ${d.date} | Source: ${d.source} | Author: ${d.author || 'N/A'}\n${d.content}`)
-    .join('\n\n---\n\n');
-
-  const userMessage = `## Company Record\n${JSON.stringify(company, null, 2)}\n\n## AIVC Team\n${JSON.stringify(team, null, 2)}\n\n## Pitchbook Funding History\n${JSON.stringify(pitchbook, null, 2)}\n\n## Source Documents\n${docsText}`;
+  const userMessage = buildUserMessage(company, team, pitchbook, documents);
 
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
@@ -95,5 +106,75 @@ export async function runAssessmentAgent(
   const text = response.content[0].type === 'text' ? response.content[0].text : '';
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (!jsonMatch) throw new Error('Assessment agent did not return valid JSON');
+  return JSON.parse(jsonMatch[0]);
+}
+
+const PORTFOLIO_ASSESSMENT_PROMPT = `You are an investment analyst at AIVC, an AI-focused venture capital fund. Your task is to produce a structured analytical assessment of a portfolio company — one AIVC has already invested in.
+
+You will receive the company's CRM record, all source documents (portfolio updates, meeting notes, emails, board materials, etc.), Pitchbook funding data, and key metrics history. Reason carefully across all sources.
+
+Produce answers to four analytical questions about the company's trajectory since our investment.
+
+## Question 1: Are they tracking to targets?
+
+Compare current performance against the plan presented at the time of investment. Consider: ARR growth, customer acquisition, headcount, product milestones, burn rate. If metrics are ahead of plan, say so. If behind, identify which areas and by how much.
+
+## Question 2: What challenges exist?
+
+Identify the top 2-3 operational, technical, or market challenges the company faces. Be specific — "hiring is hard" is too vague; "3 ML engineering roles unfilled for 2+ months, blocking cardiology expansion" is useful. Consider: hiring, burn rate, competitive threats, regulatory, product delays, customer churn.
+
+## Question 3: How can we improve our investment?
+
+As a board member/observer, what specific actions can AIVC take to help? Consider: network introductions (hiring, partnerships, customers), strategic guidance, portfolio company synergies, fundraising support. Be concrete — name AIVC team members and specific actions.
+
+## Question 4: Would we consider further investment?
+
+Based on trajectory and market conditions, would we follow on in the next round? State the conditions under which we would (metrics thresholds, milestones) and any concerns that would make us pass. This is a forward-looking judgment call.
+
+## Actions
+
+Derive 3-5 actions from the assessment above. Every action must trace back to a gap or opportunity identified in the questions. Present actions as specific, concrete next steps. Include the AIVC team member where relevant.
+
+## Format
+
+Respond with a JSON object matching this exact structure:
+
+{
+  "questions": [
+    { "key": "tracking_targets", "question": "Are they tracking to targets?", "answer": "2-4 sentences" },
+    { "key": "challenges", "question": "What challenges exist?", "answer": "3-5 sentences" },
+    { "key": "improve_investment", "question": "How can we improve our investment?", "answer": "3-5 sentences" },
+    { "key": "further_investment", "question": "Would we consider further investment?", "answer": "2-4 sentences" }
+  ],
+  "actions": ["action 1", "action 2", "..."]
+}
+
+## Quality bar
+
+- Do not fill space. Two sentences that mean something beat five that pad.
+- Reference specific metrics and data points from the source documents.
+- Actions follow from assessment. No orphan actions.
+- Name specific AIVC team members when suggesting actions.`;
+
+export async function runPortfolioAssessmentAgent(
+  company: Record<string, unknown>,
+  team: Record<string, unknown>[],
+  pitchbook: Record<string, unknown>[],
+  documents: Record<string, unknown>[],
+  metrics: Record<string, unknown>[]
+): Promise<AssessmentResult> {
+  const client = new Anthropic();
+  const userMessage = buildUserMessage(company, team, pitchbook, documents, metrics);
+
+  const response = await client.messages.create({
+    model: 'claude-sonnet-4-6',
+    max_tokens: 2048,
+    system: PORTFOLIO_ASSESSMENT_PROMPT,
+    messages: [{ role: 'user', content: userMessage }],
+  });
+
+  const text = response.content[0].type === 'text' ? response.content[0].text : '';
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) throw new Error('Portfolio assessment agent did not return valid JSON');
   return JSON.parse(jsonMatch[0]);
 }
