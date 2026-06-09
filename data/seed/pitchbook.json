@@ -1,0 +1,224 @@
+[
+  {
+    "company_id": "luminary-health",
+    "round": "Seed",
+    "date": "2023-06-15",
+    "amount": 3000000,
+    "lead_investor": "Sequoia Scout",
+    "other_investors": [],
+    "pre_money_valuation": 12000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "luminary-health",
+    "round": "Series A",
+    "date": "2025-03-10",
+    "amount": 12000000,
+    "lead_investor": "AIVC",
+    "other_investors": ["Sequoia Scout"],
+    "pre_money_valuation": 48000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "spectra-analytics",
+    "round": "Seed",
+    "date": "2022-09-20",
+    "amount": 4000000,
+    "lead_investor": "Spectra Founders",
+    "other_investors": [],
+    "pre_money_valuation": 14000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "spectra-analytics",
+    "round": "Series A",
+    "date": "2023-11-08",
+    "amount": 14000000,
+    "lead_investor": "Accel",
+    "other_investors": [],
+    "pre_money_valuation": 56000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "spectra-analytics",
+    "round": "Series B",
+    "date": "2025-01-15",
+    "amount": 28000000,
+    "lead_investor": "Accel",
+    "other_investors": ["AIVC"],
+    "pre_money_valuation": 140000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "vaultik",
+    "round": "Seed",
+    "date": "2025-10-22",
+    "amount": 4500000,
+    "lead_investor": "AIVC",
+    "other_investors": [],
+    "pre_money_valuation": 16000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "codeweave",
+    "round": "Seed",
+    "date": "2023-08-14",
+    "amount": 4000000,
+    "lead_investor": "Y Combinator",
+    "other_investors": ["Angels"],
+    "pre_money_valuation": 16000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "codeweave",
+    "round": "Series A",
+    "date": "2025-04-18",
+    "amount": 15000000,
+    "lead_investor": "AIVC",
+    "other_investors": ["Index Ventures"],
+    "pre_money_valuation": 60000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "terramind",
+    "round": "Seed",
+    "date": "2023-07-10",
+    "amount": 2500000,
+    "lead_investor": "Breakthrough Energy Ventures",
+    "other_investors": [],
+    "pre_money_valuation": 10000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "terramind",
+    "round": "Series A",
+    "date": "2025-06-05",
+    "amount": 10000000,
+    "lead_investor": "Breakthrough Energy Ventures",
+    "other_investors": ["AIVC"],
+    "pre_money_valuation": 40000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "novabio",
+    "round": "Seed",
+    "date": "2024-04-22",
+    "amount": 5000000,
+    "lead_investor": "a16z Bio",
+    "other_investors": [],
+    "pre_money_valuation": 20000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "dataforge",
+    "round": "Bootstrapped",
+    "date": null,
+    "amount": 0,
+    "lead_investor": null,
+    "other_investors": [],
+    "pre_money_valuation": null,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "bloom-ai",
+    "round": "Seed",
+    "date": "2023-10-12",
+    "amount": 3000000,
+    "lead_investor": "Balderton Capital",
+    "other_investors": [],
+    "pre_money_valuation": 12000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "agrimind",
+    "round": "Seed",
+    "date": "2023-09-18",
+    "amount": 5000000,
+    "lead_investor": "Valor Capital Group",
+    "other_investors": [],
+    "pre_money_valuation": 18000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "meridian-cyber",
+    "round": "Series A",
+    "date": "2024-03-25",
+    "amount": 18000000,
+    "lead_investor": "Bessemer Venture Partners",
+    "other_investors": [],
+    "pre_money_valuation": 72000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "healthbridge",
+    "round": "Seed",
+    "date": "2023-11-20",
+    "amount": 4000000,
+    "lead_investor": "ARCH Venture Partners",
+    "other_investors": [],
+    "pre_money_valuation": 15000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "cloudnest",
+    "round": "Seed",
+    "date": "2023-09-05",
+    "amount": 6000000,
+    "lead_investor": "Atomico",
+    "other_investors": [],
+    "pre_money_valuation": 22000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "parallel-systems",
+    "round": "Seed",
+    "date": "2023-10-30",
+    "amount": 8000000,
+    "lead_investor": "Greylock Partners",
+    "other_investors": [],
+    "pre_money_valuation": 32000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "signalfox",
+    "round": "Seed",
+    "date": "2023-08-28",
+    "amount": 4500000,
+    "lead_investor": "First Round Capital",
+    "other_investors": [],
+    "pre_money_valuation": 18000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "signalfox",
+    "round": "Series A",
+    "date": "2026-06-07",
+    "amount": 14000000,
+    "lead_investor": "AIVC",
+    "other_investors": [],
+    "pre_money_valuation": 56000000,
+    "status": "pending",
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "finley",
+    "round": "Seed",
+    "date": "2023-07-25",
+    "amount": 3500000,
+    "lead_investor": "Kleiner Perkins",
+    "other_investors": [],
+    "pre_money_valuation": 14000000,
+    "source": "pitchbook"
+  },
+  {
+    "company_id": "finley",
+    "round": "Series A",
+    "date": "2026-06-08",
+    "amount": 12000000,
+    "lead_investor": "AIVC",
+    "other_investors": ["Ribbit Capital"],
+    "pre_money_valuation": 48000000,
+    "status": "pending",
+    "source": "pitchbook"
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "id": "sarah-chen",
+    "name": "Sarah Chen",
+    "role": "Managing Partner",
+    "focus_areas": ["AI infrastructure", "enterprise SaaS"],
+    "years_experience": 15,
+    "email": "sarah.chen@aivc.com"
+  },
+  {
+    "id": "david-okonkwo",
+    "name": "David Okonkwo",
+    "role": "Partner",
+    "focus_areas": ["applied AI", "vertical solutions", "healthcare"],
+    "years_experience": 12,
+    "email": "david.okonkwo@aivc.com"
+  },
+  {
+    "id": "maya-patel",
+    "name": "Maya Patel",
+    "role": "Principal",
+    "focus_areas": ["developer tools", "data infrastructure"],
+    "years_experience": 8,
+    "email": "maya.patel@aivc.com"
+  },
+  {
+    "id": "james-morrison",
+    "name": "James Morrison",
+    "role": "Associate",
+    "focus_areas": ["generalist"],
+    "years_experience": 3,
+    "email": "james.morrison@aivc.com"
+  },
+  {
+    "id": "elena-rodriguez",
+    "name": "Elena Rodriguez",
+    "role": "Analyst",
+    "focus_areas": ["research", "market analysis"],
+    "years_experience": 1,
+    "email": "elena.rodriguez@aivc.com"
+  }
+]

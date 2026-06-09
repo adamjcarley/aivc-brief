@@ -1,0 +1,162 @@
+[
+  {
+    "company_id": "luminary-health",
+    "period": "Q1 2026",
+    "date": "2026-03-31",
+    "source": "company_reported",
+    "metrics": {
+      "arr": 3200000,
+      "arr_growth_qoq": null,
+      "customer_count": 145,
+      "monthly_burn": 400000,
+      "cash_runway_months": 16,
+      "cac": 18000,
+      "ltv": 85000,
+      "arpu": null
+    }
+  },
+  {
+    "company_id": "luminary-health",
+    "period": "Q2 2026",
+    "date": "2026-06-02",
+    "source": "company_reported",
+    "metrics": {
+      "arr": 3800000,
+      "arr_growth_qoq": 18.75,
+      "customer_count": 180,
+      "monthly_burn": 420000,
+      "cash_runway_months": 14,
+      "cac": 16000,
+      "ltv": 88000,
+      "arpu": null
+    }
+  },
+  {
+    "company_id": "spectra-analytics",
+    "period": "Q1 2026",
+    "date": "2026-03-31",
+    "source": "company_reported",
+    "metrics": {
+      "arr": 10100000,
+      "arr_growth_qoq": null,
+      "customer_count": 43,
+      "monthly_burn": 1050000,
+      "cash_runway_months": 20,
+      "cac": 45000,
+      "ltv": 380000,
+      "arpu": 235000
+    }
+  },
+  {
+    "company_id": "spectra-analytics",
+    "period": "Q2 2026",
+    "date": "2026-05-28",
+    "source": "company_reported",
+    "metrics": {
+      "arr": 11200000,
+      "arr_growth_qoq": 10.89,
+      "customer_count": 45,
+      "monthly_burn": 1100000,
+      "cash_runway_months": 18,
+      "cac": 52000,
+      "ltv": 365000,
+      "arpu": 249000
+    }
+  },
+  {
+    "company_id": "vaultik",
+    "period": "Q1 2026",
+    "date": "2026-03-31",
+    "source": "company_reported",
+    "metrics": {
+      "arr": 500000,
+      "arr_growth_qoq": null,
+      "customer_count": 4,
+      "monthly_burn": 160000,
+      "cash_runway_months": 20,
+      "cac": 35000,
+      "ltv": 200000,
+      "arpu": null
+    }
+  },
+  {
+    "company_id": "vaultik",
+    "period": "Q2 2026",
+    "date": "2026-06-05",
+    "source": "company_reported",
+    "metrics": {
+      "arr": 800000,
+      "arr_growth_qoq": 60.0,
+      "customer_count": 6,
+      "monthly_burn": 180000,
+      "cash_runway_months": 16,
+      "cac": 32000,
+      "ltv": 210000,
+      "arpu": null
+    }
+  },
+  {
+    "company_id": "codeweave",
+    "period": "Q1 2026",
+    "date": "2026-03-31",
+    "source": "company_reported",
+    "metrics": {
+      "arr": 4500000,
+      "arr_growth_qoq": null,
+      "customer_count": 68,
+      "monthly_burn": 480000,
+      "cash_runway_months": 15,
+      "cac": 12000,
+      "ltv": 95000,
+      "arpu": null
+    }
+  },
+  {
+    "company_id": "codeweave",
+    "period": "Q2 2026",
+    "date": "2026-06-04",
+    "source": "company_reported",
+    "metrics": {
+      "arr": 5400000,
+      "arr_growth_qoq": 20.0,
+      "customer_count": 85,
+      "monthly_burn": 520000,
+      "cash_runway_months": 12,
+      "cac": 11000,
+      "ltv": 102000,
+      "arpu": null
+    }
+  },
+  {
+    "company_id": "terramind",
+    "period": "Q1 2026",
+    "date": "2026-03-31",
+    "source": "company_reported",
+    "metrics": {
+      "arr": 1900000,
+      "arr_growth_qoq": null,
+      "customer_count": 13,
+      "monthly_burn": 340000,
+      "cash_runway_months": 13,
+      "cac": 65000,
+      "ltv": 250000,
+      "arpu": null
+    }
+  },
+  {
+    "company_id": "terramind",
+    "period": "Q2 2026",
+    "date": "2026-05-30",
+    "source": "company_reported",
+    "metrics": {
+      "arr": 2100000,
+      "arr_growth_qoq": 10.53,
+      "customer_count": 15,
+      "monthly_burn": 350000,
+      "cash_runway_months": 10,
+      "cac": 72000,
+      "ltv": 240000,
+      "arpu": null
+    }
+  }
+]
