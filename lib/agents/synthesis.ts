@@ -49,7 +49,7 @@ export async function runSynthesisAgent(
   const userMessage = `## Company Record\n${JSON.stringify(company, null, 2)}\n\n## Assessment\n${JSON.stringify(assessment, null, 2)}\n\n## Narrative\n${JSON.stringify({ company_overview: narrative.company_overview, company_updates: narrative.company_updates }, null, 2)}`;
 
   const response = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: 'claude-sonnet-4-6',
     max_tokens: 1024,
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: userMessage }],

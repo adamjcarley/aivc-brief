@@ -51,7 +51,7 @@ export async function runDocumentGenerator(
   const userMessage = `## Company Record\n${JSON.stringify(company, null, 2)}\n\n## Existing Documents\n${docsContext}\n\n## Request\nType: ${docType}\nGuidance: ${guidance || 'None — generate based on company context'}`;
 
   const response = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: 'claude-sonnet-4-6',
     max_tokens: 3000,
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: userMessage }],

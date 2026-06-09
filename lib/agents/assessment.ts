@@ -86,7 +86,7 @@ export async function runAssessmentAgent(
   const userMessage = `## Company Record\n${JSON.stringify(company, null, 2)}\n\n## AIVC Team\n${JSON.stringify(team, null, 2)}\n\n## Pitchbook Funding History\n${JSON.stringify(pitchbook, null, 2)}\n\n## Source Documents\n${docsText}`;
 
   const response = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: 'claude-sonnet-4-6',
     max_tokens: 2048,
     system: SYSTEM_PROMPT,
     messages: [{ role: 'user', content: userMessage }],
