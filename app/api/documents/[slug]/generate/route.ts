@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { sql } from '@vercel/postgres';
 import { runDocumentGenerator } from '@/lib/agents/document-generator';
 
-export const maxDuration = 60;
+export const maxDuration = 300;
 
 export async function POST(
   request: Request,
