@@ -76,6 +76,17 @@ export default function AdminPage() {
         setStatusMessage(`Error: ${data.error}`);
         return;
       }
+      setStatus('regenerating_brief');
+      setStatusMessage(`Document "${data.document?.title}" created. Regenerating brief...`);
+      fetch('/api/generation-log').then(r => r.json()).then(setLog);
+
+      const briefRes = await fetch(`/api/briefs/${selectedCompany}/generate`, { method: 'POST' });
+      const briefData = await briefRes.json();
+      if (briefData.status === 'error') {
+        setStatus('error');
+        setStatusMessage(`Document created but brief failed: ${briefData.error}`);
+        return;
+      }
       setStatus('done');
       setStatusMessage(`Done! Document "${data.document?.title}" created and brief regenerated.`);
       fetch('/api/generation-log').then(r => r.json()).then(setLog);
