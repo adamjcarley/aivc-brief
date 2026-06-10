@@ -118,13 +118,19 @@ export default function CompanyBriefPage() {
           </div>
         )}
 
-        {brief?.status === 'error' && (
-          <div className="bg-[var(--red-bg)] text-[var(--red)] text-sm px-5 py-3 rounded-xl mb-4">
-            Error generating brief: {brief.error}
+        {(brief?.status === 'error' || (brief?.status === 'generating' && !generating)) && (
+          <div className="bg-[var(--red-bg)] text-[var(--red)] text-sm px-5 py-3 rounded-xl mb-4 flex items-center justify-between">
+            <span>{brief?.status === 'error' ? `Error generating brief: ${brief.error}` : 'A previous brief generation did not complete.'}</span>
+            <button
+              onClick={handleGenerate}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer bg-[var(--red)] text-white border-none hover:opacity-90 shrink-0 ml-4"
+            >
+              Retry
+            </button>
           </div>
         )}
 
-        {!hasBrief && !generating && (
+        {!hasBrief && !generating && brief?.status !== 'error' && brief?.status !== 'generating' && (
           <div className="bg-[var(--surface)] border border-[var(--border)] rounded-xl p-12 text-center mb-4">
             <p className="text-[var(--text-secondary)] mb-4">No brief has been generated for this company yet.</p>
             <button
