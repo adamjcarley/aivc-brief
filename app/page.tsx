@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Topbar, StageBadge, BriefStatusBadge } from '@/components/topbar';
@@ -66,6 +66,14 @@ function formatCurrency(amount: number): string {
 }
 
 export default function TablePage() {
+  return (
+    <Suspense>
+      <TablePageInner />
+    </Suspense>
+  );
+}
+
+function TablePageInner() {
   const searchParams = useSearchParams();
   const [companies, setCompanies] = useState<Company[]>([]);
   const initialTab = searchParams.get('tab') === 'portfolio' ? 'portfolio' : 'pipeline';
