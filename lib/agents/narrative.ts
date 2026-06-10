@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { withRetry } from '../retry';
 
 const SYSTEM_PROMPT = `You are an investment analyst at AIVC, an AI-focused venture capital fund. Your task is to produce narrative content for a company briefing.
 
@@ -107,17 +108,19 @@ export async function runNarrativeAgent(
   const client = new Anthropic();
   const userMessage = buildUserMessage(company, team, pitchbook, documents);
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 3000,
-    system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: userMessage }],
-  });
+  return withRetry(async () => {
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 3000,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: userMessage }],
+    });
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '';
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Narrative agent did not return valid JSON');
-  return JSON.parse(jsonMatch[0]);
+    const text = response.content[0].type === 'text' ? response.content[0].text : '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Narrative agent did not return valid JSON');
+    return JSON.parse(jsonMatch[0]);
+  });
 }
 
 export interface PortfolioNarrativeResult extends NarrativeResult {
@@ -199,15 +202,17 @@ export async function runPortfolioNarrativeAgent(
   const client = new Anthropic();
   const userMessage = buildUserMessage(company, team, pitchbook, documents, metrics);
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 4000,
-    system: PORTFOLIO_NARRATIVE_PROMPT,
-    messages: [{ role: 'user', content: userMessage }],
-  });
+  return withRetry(async () => {
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 4000,
+      system: PORTFOLIO_NARRATIVE_PROMPT,
+      messages: [{ role: 'user', content: userMessage }],
+    });
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '';
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Portfolio narrative agent did not return valid JSON');
-  return JSON.parse(jsonMatch[0]);
+    const text = response.content[0].type === 'text' ? response.content[0].text : '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Portfolio narrative agent did not return valid JSON');
+    return JSON.parse(jsonMatch[0]);
+  });
 }

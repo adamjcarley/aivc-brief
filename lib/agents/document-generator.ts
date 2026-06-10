@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { withRetry } from '../retry';
 
 const SYSTEM_PROMPT = `You are generating synthetic source documents for a venture capital intelligence system. The documents should be realistic and internally consistent with existing company data.
 
@@ -50,15 +51,17 @@ export async function runDocumentGenerator(
 
   const userMessage = `## Company Record\n${JSON.stringify(company, null, 2)}\n\n## Existing Documents\n${docsContext}\n\n## Request\nType: ${docType}\nGuidance: ${guidance || 'None — generate based on company context'}`;
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 3000,
-    system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: userMessage }],
-  });
+  return withRetry(async () => {
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 3000,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: userMessage }],
+    });
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '';
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Document generator did not return valid JSON');
-  return JSON.parse(jsonMatch[0]);
+    const text = response.content[0].type === 'text' ? response.content[0].text : '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Document generator did not return valid JSON');
+    return JSON.parse(jsonMatch[0]);
+  });
 }

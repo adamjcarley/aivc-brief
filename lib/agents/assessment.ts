@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { withRetry } from '../retry';
 
 const SYSTEM_PROMPT = `You are an investment analyst at AIVC, an AI-focused venture capital fund. Your task is to produce a structured analytical assessment of a pipeline company.
 
@@ -96,17 +97,19 @@ export async function runAssessmentAgent(
   const client = new Anthropic();
   const userMessage = buildUserMessage(company, team, pitchbook, documents);
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 2048,
-    system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: userMessage }],
-  });
+  return withRetry(async () => {
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 2048,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: userMessage }],
+    });
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '';
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Assessment agent did not return valid JSON');
-  return JSON.parse(jsonMatch[0]);
+    const text = response.content[0].type === 'text' ? response.content[0].text : '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Assessment agent did not return valid JSON');
+    return JSON.parse(jsonMatch[0]);
+  });
 }
 
 const PORTFOLIO_ASSESSMENT_PROMPT = `You are an investment analyst at AIVC, an AI-focused venture capital fund. Your task is to produce a structured analytical assessment of a portfolio company — one AIVC has already invested in.
@@ -166,15 +169,17 @@ export async function runPortfolioAssessmentAgent(
   const client = new Anthropic();
   const userMessage = buildUserMessage(company, team, pitchbook, documents, metrics);
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 2048,
-    system: PORTFOLIO_ASSESSMENT_PROMPT,
-    messages: [{ role: 'user', content: userMessage }],
-  });
+  return withRetry(async () => {
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 2048,
+      system: PORTFOLIO_ASSESSMENT_PROMPT,
+      messages: [{ role: 'user', content: userMessage }],
+    });
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '';
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Portfolio assessment agent did not return valid JSON');
-  return JSON.parse(jsonMatch[0]);
+    const text = response.content[0].type === 'text' ? response.content[0].text : '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Portfolio assessment agent did not return valid JSON');
+    return JSON.parse(jsonMatch[0]);
+  });
 }

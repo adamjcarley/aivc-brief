@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { withRetry } from '../retry';
 import type { AssessmentResult } from './assessment';
 import type { NarrativeResult } from './narrative';
 
@@ -49,17 +50,19 @@ export async function runSynthesisAgent(
 
   const userMessage = `## Company Record\n${JSON.stringify(company, null, 2)}\n\n## Assessment\n${JSON.stringify(assessment, null, 2)}\n\n## Narrative\n${JSON.stringify({ company_overview: narrative.company_overview, company_updates: narrative.company_updates }, null, 2)}`;
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 1024,
-    system: SYSTEM_PROMPT,
-    messages: [{ role: 'user', content: userMessage }],
-  });
+  return withRetry(async () => {
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: userMessage }],
+    });
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '';
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Synthesis agent did not return valid JSON');
-  return JSON.parse(jsonMatch[0]);
+    const text = response.content[0].type === 'text' ? response.content[0].text : '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Synthesis agent did not return valid JSON');
+    return JSON.parse(jsonMatch[0]);
+  });
 }
 
 const PORTFOLIO_SYNTHESIS_PROMPT = `You are an investment analyst at AIVC. Your task is to produce a concise executive summary for a portfolio company briefing.
@@ -101,15 +104,17 @@ export async function runPortfolioSynthesisAgent(
 
   const userMessage = `## Company Record\n${JSON.stringify(company, null, 2)}\n\n## Assessment\n${JSON.stringify(assessment, null, 2)}\n\n## Narrative\n${JSON.stringify({ company_overview: narrative.company_overview, company_updates: narrative.company_updates }, null, 2)}`;
 
-  const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
-    max_tokens: 1024,
-    system: PORTFOLIO_SYNTHESIS_PROMPT,
-    messages: [{ role: 'user', content: userMessage }],
-  });
+  return withRetry(async () => {
+    const response = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 1024,
+      system: PORTFOLIO_SYNTHESIS_PROMPT,
+      messages: [{ role: 'user', content: userMessage }],
+    });
 
-  const text = response.content[0].type === 'text' ? response.content[0].text : '';
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) throw new Error('Portfolio synthesis agent did not return valid JSON');
-  return JSON.parse(jsonMatch[0]);
+    const text = response.content[0].type === 'text' ? response.content[0].text : '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error('Portfolio synthesis agent did not return valid JSON');
+    return JSON.parse(jsonMatch[0]);
+  });
 }
