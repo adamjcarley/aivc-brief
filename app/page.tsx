@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Topbar, StageBadge, BriefStatusBadge } from '@/components/topbar';
 
 interface Company {
@@ -65,8 +66,10 @@ function formatCurrency(amount: number): string {
 }
 
 export default function TablePage() {
+  const searchParams = useSearchParams();
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [tab, setTab] = useState<'pipeline' | 'portfolio'>('pipeline');
+  const initialTab = searchParams.get('tab') === 'portfolio' ? 'portfolio' : 'pipeline';
+  const [tab, setTab] = useState<'pipeline' | 'portfolio'>(initialTab);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 

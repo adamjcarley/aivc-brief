@@ -92,7 +92,10 @@ export default function CompanyBriefPage() {
       {/* Company Header */}
       <div className="bg-[var(--surface)] border-b border-[var(--border)] px-8 pt-6 pb-5">
         <div className="text-xs text-[var(--text-tertiary)] mb-2">
-          <Link href="/" className="text-[var(--accent)] no-underline">{isPipeline ? 'Pipeline' : 'Portfolio'}</Link> &rsaquo; {stageLabel}
+          <Link href="/" className="text-[var(--accent)] no-underline">Companies</Link>
+          {' '}&rsaquo;{' '}
+          <Link href={`/?tab=${isPipeline ? 'pipeline' : 'portfolio'}`} className="text-[var(--accent)] no-underline">{isPipeline ? 'Pipeline' : 'Portfolio'}</Link>
+          {' '}&rsaquo; {company.name}
         </div>
         <div className="flex items-center justify-between gap-4">
           <div>
