@@ -20,6 +20,9 @@ interface Company {
   board_role: string | null;
   brief_status: string | null;
   brief_generated_at: string | null;
+  arr: number | null;
+  arr_growth_qoq: number | null;
+  cash_runway_months: number | null;
 }
 
 const STAGE_ORDER: Record<string, number> = {
@@ -197,28 +200,7 @@ function PipelineTable({ companies }: { companies: Company[] }) {
 }
 
 function PortfolioTable({ companies }: { companies: Company[] }) {
-  const [metrics, setMetrics] = useState<Record<string, Record<string, number>>>({});
-
-  useEffect(() => {
-    Promise.all(
-      companies.map(c =>
-        fetch(`/api/companies/${c.id}`).then(r => r.json()).then(data => ({
-          id: c.id,
-          metrics: Object.fromEntries((data.metrics || []).map((m: { metric_name: string; value: number }) => [m.metric_name, Number(m.value)])),
-        }))
-      )
-    ).then(results => {
-      const m: Record<string, Record<string, number>> = {};
-      for (const r of results) m[r.id] = r.metrics;
-      setMetrics(m);
-    });
-  }, [companies]);
-
-  const sorted = [...companies].sort((a, b) => {
-    const arrA = metrics[a.id]?.arr || 0;
-    const arrB = metrics[b.id]?.arr || 0;
-    return arrB - arrA;
-  });
+  const sorted = [...companies].sort((a, b) => (b.arr ?? 0) - (a.arr ?? 0));
 
   return (
     <table className="w-full border-collapse text-[13px]">
@@ -230,32 +212,29 @@ function PortfolioTable({ companies }: { companies: Company[] }) {
         </tr>
       </thead>
       <tbody>
-        {sorted.map(c => {
-          const m = metrics[c.id] || {};
-          return (
-            <tr key={c.id} className="cursor-pointer hover:bg-[#f8fafc]" onClick={() => window.location.href = `/company/${c.id}`}>
-              <td className="px-4 py-3 border-b border-[var(--border-light)]">
-                <div className="font-semibold text-[var(--text)]">{c.name}</div>
-                <div className="text-xs text-[var(--text-tertiary)] mt-0.5 max-w-80 truncate">{c.description}</div>
-              </td>
-              <td className="px-4 py-3 border-b border-[var(--border-light)] text-[var(--text)]">{c.industry}</td>
-              <td className="px-4 py-3 border-b border-[var(--border-light)] text-[var(--text)]">{m.arr ? formatCurrency(m.arr) : '—'}</td>
-              <td className="px-4 py-3 border-b border-[var(--border-light)]">
-                {m.arr_growth_qoq ? <span className="text-xs font-semibold text-[var(--green)]">+{m.arr_growth_qoq.toFixed(1)}%</span> : '—'}
-              </td>
-              <td className="px-4 py-3 border-b border-[var(--border-light)] text-[var(--text)]">{m.cash_runway_months ? `${m.cash_runway_months} mo` : '—'}</td>
-              <td className="px-4 py-3 border-b border-[var(--border-light)] text-[var(--text)]">{c.aivc_investment ? formatCurrency(c.aivc_investment) : '—'}</td>
-              <td className="px-4 py-3 border-b border-[var(--border-light)]">
-                {c.board_role === 'board_seat' && <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[var(--purple-bg)] text-[var(--purple)]">Board Seat</span>}
-                {c.board_role === 'board_observer' && <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[var(--accent-light)] text-[var(--accent)]">Observer</span>}
-              </td>
-              <td className="px-4 py-3 border-b border-[var(--border-light)] text-[var(--text)]">{shortName(TEAM_NAMES[c.aivc_lead] || c.aivc_lead)}</td>
-              <td className="px-4 py-3 border-b border-[var(--border-light)]">
-                <BriefStatusBadge status={c.brief_status || 'none'} generatedAt={c.brief_generated_at} />
-              </td>
-            </tr>
-          );
-        })}
+        {sorted.map(c => (
+          <tr key={c.id} className="cursor-pointer hover:bg-[#f8fafc]" onClick={() => window.location.href = `/company/${c.id}`}>
+            <td className="px-4 py-3 border-b border-[var(--border-light)]">
+              <div className="font-semibold text-[var(--text)]">{c.name}</div>
+              <div className="text-xs text-[var(--text-tertiary)] mt-0.5 max-w-80 truncate">{c.description}</div>
+            </td>
+            <td className="px-4 py-3 border-b border-[var(--border-light)] text-[var(--text)]">{c.industry}</td>
+            <td className="px-4 py-3 border-b border-[var(--border-light)] text-[var(--text)]">{c.arr ? formatCurrency(c.arr) : '—'}</td>
+            <td className="px-4 py-3 border-b border-[var(--border-light)]">
+              {c.arr_growth_qoq ? <span className="text-xs font-semibold text-[var(--green)]">+{Number(c.arr_growth_qoq).toFixed(1)}%</span> : '—'}
+            </td>
+            <td className="px-4 py-3 border-b border-[var(--border-light)] text-[var(--text)]">{c.cash_runway_months ? `${Math.round(Number(c.cash_runway_months))} mo` : '—'}</td>
+            <td className="px-4 py-3 border-b border-[var(--border-light)] text-[var(--text)]">{c.aivc_investment ? formatCurrency(c.aivc_investment) : '—'}</td>
+            <td className="px-4 py-3 border-b border-[var(--border-light)]">
+              {c.board_role === 'board_seat' && <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[var(--purple-bg)] text-[var(--purple)]">Board Seat</span>}
+              {c.board_role === 'board_observer' && <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[var(--accent-light)] text-[var(--accent)]">Observer</span>}
+            </td>
+            <td className="px-4 py-3 border-b border-[var(--border-light)] text-[var(--text)]">{shortName(TEAM_NAMES[c.aivc_lead] || c.aivc_lead)}</td>
+            <td className="px-4 py-3 border-b border-[var(--border-light)]">
+              <BriefStatusBadge status={c.brief_status || 'none'} generatedAt={c.brief_generated_at} />
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );
